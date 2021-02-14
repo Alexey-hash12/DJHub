@@ -1,0 +1,73 @@
+{% extends 'wrepper.html' %}
+
+{% block title %}
+Fill your profile
+{% endblock %}
+
+{% block content %}
+{% if request.user.profile.face %}
+<p class="lead">You have fill your profile, if you want to change them, <a href='{% url "profile" %}'>click here</a></p>
+{% else %}
+<div class="container">
+	<div class="col-md-8 order-md-1">
+		<h4 class="mb-3">Update Profile</h4>
+		<form class="needs-validation" novalidate=""method="post" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="row">
+				<div class="col-md-6 mb-3">
+					<label for="firstName">First name</label>
+					<input type="text" class="form-control" name="first_name" id="firstName" placeholder="" value="{{ profile.first_name }}" required="">
+					<div class="invalid-feedback">
+						Valid first name is required.
+					</div>
+				</div>
+				<div class="col-md-6 mb-3">
+					<label for="lastName">Last name</label>
+					<input type="text" class="form-control" id="lastName" name='last_name' placeholder="" value="{{ profile.last_name }}" required="">
+					<div class="invalid-feedback">
+						Valid last name is required.
+					</div>
+				</div>
+			</div>
+			<div class="mb-3">
+				<label for="email">Email <span class="text-muted">(Optional)</span></label>
+				<input type="email"  name='email' class="form-control" id="email" placeholder="{{ profile.email }}">
+				<div class="invalid-feedback">
+					Please enter a valid email address for shipping updates.
+				</div>
+			</div>
+			<div class="row">
+			<div class="col-md-6 mb-3">
+				<label>
+						Choose your Face
+					</label>
+				<div class="custom-file" id="customFile" lang="es">
+					<input type="file" class="custom-file-input" id="exampleInputFile" name="face" aria-describedby="fileHelp">
+					<label class="custom-file-label" for="exampleInputFile">
+						Select file...
+					</label>
+
+				</div>
+			</div>
+			<div class="col-md-6 mb-3">
+				<div class="custom-file" id="customFile" lang="es">
+					<label for="exampleInputAge">
+						Enter you Age
+					</label>
+					<input id="exampleInputAge" type="number" class="form-control" name="age" >
+				</div>
+			</div>
+			</div>
+			<div class="mb-3">
+				<label for="email">Intro <span class="text-muted"></span></label>
+				<textarea type="text"  name='intro' class="form-control" id="email" placeholder="{{ profile.intro }}"></textarea>
+				<div class="invalid-feedback">
+					Please enter a valid email address for shipping updates.
+				</div>
+			</div>
+			<button class="btn btn-primary btn-lg btn-block" type="submit">Apply</button>
+		</form>
+	</div>
+</div>
+{% endif %}
+{% endblock %}

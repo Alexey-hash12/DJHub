@@ -1,0 +1,9 @@
+{% extends 'wrepper.html' %}
+
+{% block title %}
+Error
+{% endblock %}
+
+{% block content %}
+<p class="lead">You do not authorize, plase do in <a href='{% url "login_page" %}'>here</a>, or just <a href='{% url "register_page" %}'>register</a></p>
+{% endblock %}

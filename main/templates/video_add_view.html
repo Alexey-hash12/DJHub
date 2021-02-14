@@ -1,0 +1,15 @@
+{% extends 'wrepper.html' %}
+
+{% block title %}
+Add your Video
+{% endblock %}
+
+
+{% block content %}
+<form action="{% url 'add' %}" method="post" enctype="multipart/form-data">
+	{% csrf_token %}
+	{{form}}
+	<button type="submit">Add</button>
+</form>
+
+{% endblock %}

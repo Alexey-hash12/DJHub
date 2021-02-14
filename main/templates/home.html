@@ -1,0 +1,48 @@
+{% extends 'wrepper.html' %}
+
+{% block title %}
+DJhub
+{% endblock %}
+
+{% block content %}
+<div class="container">
+	<div class="row">
+		{% for i in vm %}
+		<div class="col-md-3">
+			<div class="card mb-4 box-shadow">
+				<a href="{% url 'list' i.id %}"><img class="card-img-top" src="{{ i.poster.url }}"></a>
+				<div class="card-body">
+					<a href="{% url 'list' i.id %}"><p class="card-text">{{ i.title }}</p></a>
+					<a href="{% url 'other_profile' i.user.id %}"><p class="card-text">{{ i.user }}</p></a>
+					<div class="d-flex justify-content-between align-items-center">
+						<div class="btn-group">
+						</div>
+						<small class="text-muted">{{ i.date }}</small>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		{% endfor %}
+	</div>
+	<div class="pagination">
+		<span class="step-links">
+			{% if page_obj.has_previous %}
+			<a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+			{% endif %}
+			<span class="current">
+				Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+			</span>
+			{% if page_obj.has_next %}
+			<a href="?page={{ page_obj.next_page_number }}">Next</a>
+			{% endif %}
+		</span>
+	</div>
+	<br>
+</div>
+{% if request.user.is_authenticated %}
+{% if request.user.profile.is_newsletter == None %}
+{% include 'includes/newsletter.html' %}
+{% endif %}
+{% endif %}
+{% endblock %}

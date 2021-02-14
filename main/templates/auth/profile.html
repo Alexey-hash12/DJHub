@@ -1,0 +1,91 @@
+{% extends 'wrepper.html' %}
+
+{% block title %}
+{{request.user}} Profile
+{% endblock %}
+
+
+
+{% block content %}
+<div class="jumbotron p-3 p-5 text-white rounded bg-dark" style="margin-top:-70px;">
+        <div class="col-md-6 px-0">
+          <h1 class="display-4 font-italic">{{request.user}}<img src="{{ request.user.profile.face.url }}" alt="" style="height:100px; padding:20px; border-radius:50%;"></h1>
+          <p class="lead my-3">{{ request.user.profile.intro }}</p>
+
+          <p class="lead mt-5">First name: {{ request.user.profile.first_name }}</p>
+          <p class="lead my-3">Last name: {{ request.user.profile.last_name }}</p>
+          <p class="lead my-3">Email: {{ request.user.profile.email }}</p>
+          <p class="lead mb-0">Date Joined: {{request.user.date_joined}}</p>
+           <p class="lead mb-0">Last visit: {{ request.user.last_login }}</p>
+          <p class="lead mb-0">Your subscribers: {{ request.user.profile.subscribers.all|length }}</p>
+          {% if a %}
+          Your subscriptions: 
+          {% for i in a %}
+         	 <a href='{% url "other_profile" i.id %}'>{{ i }}</a>
+          {% endfor %}
+          {% else %}
+          You dont have subscriptions
+          {% endif %}
+          <p class="lead mt-5 mb-0"><a href="{% url 'edit_profile' %}">Update Profile</a></p>
+        </div>
+        <p class="lead mb-0"><a href="{% url 'addview' %}">Add your video</a></p>
+        {% for i in uw %}
+        	{{ i }}
+        {% endfor %}
+        <br>
+      </div>
+      <div class="row ml-5 mr-5">
+     <span class='lead'> Liked: </span>
+
+      {% if request.user.profile.likes.all %}
+      <div class="row ml-5">
+
+        {% for j in request.user.profile.likes.all %}
+           <div class="col-md-4">
+            <div class="card mb-4 box-shadow">
+              <a href="{% url 'list' j.id %}"><img class="card-img-top" src="{{ j.poster.url }}"></a>
+              <div class="card-body">
+                <a href="{% url 'list' j.id %}"><p class="card-text">{{ j.title }}</p></a>  
+                <a href="{% url 'other_profile' j.user.id %}"><p class="card-text">{{ j.user }}</p></a>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="btn-group">
+                  </div>
+                  <small class="text-muted">{{ j.date }}</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+      {% else %}
+        <span class="lead ml-2">  You dont have liked video</span>
+      {% endif %}
+    <div class='row ml-5'>
+      <span class="lead">Disliked:</span>
+
+      {% if request.user.profile.dis_likes.all %}
+      <div class="row ml-4 mr-4">
+
+        {% for j in request.user.profile.dis_likes.all %}
+           <div class="col-md-3">
+            <div class="card mb-4 box-shadow">
+              <a href="{% url 'list' j.id %}"><img class="card-img-top" src="{{ j.poster.url }}"></a>
+              <div class="card-body">
+                <a href="{% url 'list' j.id %}"><p class="card-text">{{ j.title }}</p></a>  
+                <a href="{% url 'other_profile' j.user.id %}"><p class="card-text">{{ j.user }}</p></a>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="btn-group">
+                  </div>
+                  <small class="text-muted">{{ j.date }}</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <span class="lead ml-2">You dont have disliked video</span>
+    </div>
+    {% endif %}
+  </div>
+{% endblock %}

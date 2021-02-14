@@ -1,0 +1,121 @@
+{% extends 'wrepper.html' %}
+
+{% block title %}
+{{ vm.title }}
+{% endblock %}
+
+
+{% block content %}
+{% if vm.user != request.user %}
+<div class='ml-5' style="margin-top:-50px">
+<video width="1000" height="600" controls="controls" poster='{{ vm.poster.url }}'>
+	<source src="{{ vm.video.url }}">
+</video><br>
+<h3 class="text-muted">{{vm.title}}</h3>
+<h4 class="lead">{{ vm.date }}</h4>
+</div>
+<br>
+
+<div style="margin-left:35px;">
+<img width="70" style="border-radius:50%" src="{{ vm.user.profile.face.url }}" alt="">
+{% if request.user == vm.user %}
+
+<span class="lead"><a style="color:black" href="{% url 'profile' %}">{{ vm.user }}</a></span><br>
+<span style="position:absolute;" class="lead">description:<br> {{ vm.intro }}</span>
+{% else %}
+
+<a href='{% url "other_profile" vm.user.id %}'>{{ vm.user }}</a>
+{% endif %}
+<br>
+
+
+{{ vm.user.profile.subscribers.all|length }} subscribers <br>
+
+{% if request.user in vm.likes.all %}
+<form action="{% url 'remove_likes' vm.id %}" method="post">
+	{% csrf_token %}
+	<button type="submit" style="position:absolute;margin-top:-185px; margin-left:500px; padding-right:20px;" class="btn btn-info"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
+</svg> {{ vm.likes.all|length }}</button>
+
+</form>
+
+{% else %}
+<form action="{% url 'add_likes' vm.id %}" method="post">
+	{% csrf_token %}
+	<button type="submit" style="position:absolute;margin-top:-185px; margin-left:500px; padding-right:20px;"  class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
+</svg> {{ vm.likes.all|length }}</button>
+
+</form>
+
+{% endif %}
+
+{% if request.user in vm.dis_likes.all %}
+<form action="{% url 'remove_dis_likes' vm.id %}" method="post">
+	{% csrf_token %}
+	<button style="position:absolute;margin-top:-185px; margin-left:550px; padding-right:20px;font-size:1rem;" type="submit" class="btn btn-info"><svg  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018a2 2 0 01.485.06l3.76.94m-7 10v5a2 2 0 002 2h.096c.5 0 .905-.405.905-.904 0-.715.211-1.413.608-2.008L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.5" />
+</svg> {{ vm.dis_likes.all|length }}</button>
+
+</form>
+
+{% else %}
+<form action="{% url 'add_dis_likes' vm.id %}" method="post">
+	{% csrf_token %}
+	<button style="position:absolute;margin-top:-185px; margin-left:550px; padding-right:20px;" type="submit" class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018a2 2 0 01.485.06l3.76.94m-7 10v5a2 2 0 002 2h.096c.5 0 .905-.405.905-.904 0-.715.211-1.413.608-2.008L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.5" />
+</svg> {{ vm.dis_likes.all|length }}</button>
+
+</form>
+
+
+
+{% endif %}
+{% if request.user in vm.user.profile.subscribers.all%}
+<form action="{% url 'remove_subscrive' vm.user.id vm.id %}" method="post">
+	{% csrf_token %}
+<button style="position:absolute;left: 890px;margin-top:-185px;" type="submit" class="btn btn-success">You have subscribe</button>
+</form>
+{% elif request.user == vm.user %}
+<button style="position:absolute;left: 935px;margin-top:-185px;" type="submit" class="btn btn-success disabled">{{ request.user.profile.subscribers.all|length }} Subscribes</button>
+
+{% else %}
+<form action="{% url 'subscribe' vm.user.id vm.id %}" method="post">
+{% csrf_token %}
+<button style="position:absolute;left: 955px;margin-top:-185px;" type="submit" class="btn btn-success">Subscribe</button>
+</form>
+{% endif %}
+</div>
+
+<form action="{% url 'review' vm.id %}" method="post" id="review">
+	{% csrf_token %}
+	<input type="hidden" name="parentreview" value="" id="parentreview">
+	<input type="text" name="text">
+	<button type="submit">Add</button>
+</form>
+
+<span class="lead">{{ rm|length }} reviews</span><br>
+{% for j in rm %}
+	{{ j.auth_user }} <br>
+	{{ j.text }}<br> <hr>
+	<btn id="reply" href="#review" onclick="func(j.auth_user)">reply</btn>
+{% endfor %}
+
+<span>Video for you</span>
+
+<script type="text/javascript">
+	function func(user) {
+		document.getElementById("parentreview").value = user
+		document.getElementById("parentreview").type = 'text'
+	}
+</script>
+{% else %}
+it is your video {{ request.user }}
+
+<form action="{% url 'delete_view' vm.id %}" method="post">
+	{% csrf_token %}
+	<button type="submit" class="btn btn-danger">Delete</button>
+</form>
+{% endif %}
+{% endblock %}

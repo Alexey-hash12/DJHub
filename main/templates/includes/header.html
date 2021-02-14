@@ -1,0 +1,36 @@
+<header>
+	<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+		<a class="navbar-brand" href="#">DJHub</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarCollapse">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item active">
+					<a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="{% url 'about' %}">About</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link disabled" href="{% url 'contact' %}">Contact</a>
+				</li>
+			</ul>
+			<form action='{% url "search" %}' class="form-inline mt-2 mt-md-0" style="margin-right: 350px;">
+				<input style="width:400px;" class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search" name="q">
+				<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+			</form>
+			{% if user.is_authenticated %}
+			{% url 'logout' as logout %}
+			<a class="ml-2 btn btn-outline-primary" href="{{logout}}">Sign out</a>	
+			<a class="ml-2 p-2 text-white" href="{% url 'profile' %}">{{request.user.username}}  </a>
+			{% else %}	
+		{% url 'register_page' as register_page %}
+		<a {% if request.path == register_page %} class="ml-2 btn btn-primary" {% else %} class="ml-2 btn btn-outline-primary"{% endif %} href="{{register_page}}">Sign up</a>
+		{% url 'login_page' as login_page %}
+		<a {% if request.path == login_page %} class="ml-2 btn btn-primary" {% else %} class="ml-2 btn btn-outline-primary"{% endif %} href="{{login_page}}">Sign in</a>
+		{% endif %}
+		</nav>
+	</div>
+</nav>
+</header>
