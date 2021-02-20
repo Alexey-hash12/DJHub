@@ -198,9 +198,9 @@ class ValidErrorView(View):
 def FillProfile(request):
 	if request.method == 'POST':
 		try:
-		    profile = request.user.profile
+			profile = request.user.profile
 		except UserProfile.DoesNotExist:
-		    profile = Profile(user=request.user)
+			profile = Profile(user=request.user)
 
 		if request.method == 'POST':
 		    form = ProfileForm(request.POST,request.FILES ,instance=profile)
